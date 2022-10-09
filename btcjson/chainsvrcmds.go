@@ -14,6 +14,7 @@ import (
 	"reflect"
 
 	"github.com/btcsuite/btcd/wire"
+//	"github.com/btcsuite/btcd/btcutil"
 )
 
 // AddNodeSubCmd defines the type used in the addnode JSON-RPC command for the
@@ -1042,6 +1043,23 @@ func NewVerifyTxOutProofCmd(proof string) *VerifyTxOutProofCmd {
 	}
 }
 
+type AddressesList struct {
+	StrAddresses     []*string  `json:"addresses,omitempty"`   // dimxy NOTE: if rename StrAddresses to Addresses this would not work! Use a different name from json 'addresses' even if it starts from a capital
+	//SubtractFeeFromOutputs []string                 `json:"subtractFeeFromOutputs,omitempty"`  // <- also working sample
+}
+
+// GetAddressUtxosCmd defines the getaddressutxos JSON-RPC command.
+type GetAddressUtxosCmd struct {
+	Addresses     AddressesList //`json:"addresses"`
+	//addresses     *[]string   `json:"addresses,omitempty"`
+}
+
+func NewGetAddressUtxosCmd(addresses AddressesList ) *GetAddressUtxosCmd {
+	return &GetAddressUtxosCmd{
+		Addresses:     addresses,
+	}
+}
+
 func init() {
 	// No special flags for commands in this file.
 	flags := UsageFlag(0)
@@ -1102,4 +1120,5 @@ func init() {
 	MustRegisterCmd("verifychain", (*VerifyChainCmd)(nil), flags)
 	MustRegisterCmd("verifymessage", (*VerifyMessageCmd)(nil), flags)
 	MustRegisterCmd("verifytxoutproof", (*VerifyTxOutProofCmd)(nil), flags)
+	MustRegisterCmd("getaddressutxos", (*GetAddressUtxosCmd)(nil), flags)
 }

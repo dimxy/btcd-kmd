@@ -1382,3 +1382,90 @@ func (c *Client) GetDescriptorInfoAsync(descriptor string) FutureGetDescriptorIn
 func (c *Client) GetDescriptorInfo(descriptor string) (*btcjson.GetDescriptorInfoResult, error) {
 	return c.GetDescriptorInfoAsync(descriptor).Receive()
 }
+
+
+
+// dimxyyy
+// FutureGetAddressUtxosResult is a future promise to deliver the result of a
+// GetAddressUtxosAsync RPC invocation (or an applicable error).
+/*type FutureGetAddressUtxosResult chan *Response
+
+// Receive waits for the Response promised by the future and returns a
+// transaction given its hash.
+func (r FutureGetAddressUtxosResult) Receive() (*btcjson.GetAddressUtxosResult, error) {
+	res, err := ReceiveFuture(r)
+	if err != nil {
+		return nil, err
+	}
+
+	// take care of the special case where the output has been spent already
+	// it should return the string "null"
+	if string(res) == "null" {
+		return nil, nil
+	}
+
+	// Unmarshal result as an getaddressutxos result object.
+	var addressUtxosInfo *btcjson.GetAddressUtxosResult
+	err = json.Unmarshal(res, &addressUtxosInfo)
+	if err != nil {
+		return nil, err
+	}
+
+	return addressUtxosInfo, nil
+}
+*/
+/*
+// GetAddressUtxosAsync returns an instance of a type that can be used to get
+// the result of the RPC at some future time by invoking the Receive function on
+// the returned instance.
+//
+// See GetAddressUtxos for the blocking version and more details.
+func (c *Client) GetAddressUtxosAsync(addresses btcjson.AddressesList) FutureGetAddressUtxosResult {
+	cmd := btcjson.NewGetAddressUtxosCmd(addresses)
+	return c.SendCmd(cmd)
+}
+
+// GetTxOut returns the transaction output info if it's unspent and
+// nil, otherwise.
+func (c *Client) GetAddressUtxos(addresses btcjson.AddressesList) (*btcjson.GetAddressUtxosResult, error) {
+	return c.GetAddressUtxosAsync(addresses).Receive()
+}
+
+// FutureGetAddressUtxosSetInfoResult is a future promise to deliver the result of a
+// GetAddressUtxosSetInfoAsync RPC invocation (or an applicable error).
+type FutureGetAddressUtxosSetInfoResult chan *Response
+
+// Receive waits for the Response promised by the future and returns the
+// results of GetAddressUtxosSetInfoAsync RPC invocation.
+func (r FutureGetAddressUtxosSetInfoResult) Receive() (*btcjson.GetAddressUtxosSetInfoResult, error) {
+	res, err := ReceiveFuture(r)
+	if err != nil {
+		return nil, err
+	}
+
+	// Unmarshal result as an getaddressutxosinfo result object.
+	var addressUtxosSetInfo *btcjson.GetAddressUtxosSetInfoResult
+	err = json.Unmarshal(res, &addressUtxosSetInfo)
+	if err != nil {
+		return nil, err
+	}
+
+	return addressUtxosSetInfo, nil
+}
+
+// GetAddressUtxosSetInfoAsync returns an instance of a type that can be used to get
+// the result of the RPC at some future time by invoking the Receive function on
+// the returned instance.
+//
+// See GetAddressUtxosSetInfo for the blocking version and more details.
+func (c *Client) GetAddressUtxosSetInfoAsync() FutureGetAddressUtxosSetInfoResult {
+	cmd := btcjson.NewGetAddressUtxosSetInfoCmd()
+	return c.SendCmd(cmd)
+}
+
+// GetAddressUtxosSetInfo returns the statistics about the unspent transaction output
+// set.
+func (c *Client) GetAddressUtxosSetInfo() (*btcjson.GetAddressUtxosSetInfoResult, error) {
+	return c.GetAddressUtxosSetInfoAsync().Receive()
+}
+*/

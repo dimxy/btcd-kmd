@@ -100,11 +100,13 @@ func main() {
 		}
 
 		params = append(params, arg)
+		//fmt.Fprintf(os.Stderr, "params %s\n", params)
 	}
 
 	// Attempt to create the appropriate command using the arguments
 	// provided by the user.
 	cmd, err := btcjson.NewCmd(method, params...)
+	//fmt.Fprintf(os.Stderr, "cmd %s\n", cmd)
 	if err != nil {
 		// Show the error along with its error code when it's a
 		// btcjson.Error as it reallistcally will always be since the
@@ -128,6 +130,7 @@ func main() {
 	// Marshal the command into a JSON-RPC byte slice in preparation for
 	// sending it to the RPC server.
 	marshalledJSON, err := btcjson.MarshalCmd(btcjson.RpcVersion1, 1, cmd)
+	//fmt.Fprintf(os.Stderr, "marshalledJSON %s\n", marshalledJSON)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)

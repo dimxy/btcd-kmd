@@ -10,6 +10,7 @@ import (
 	"reflect"
 	"strconv"
 	"strings"
+//	"os"
 )
 
 // makeParams creates a slice of interface values for the given struct.
@@ -473,8 +474,11 @@ func assignField(paramNum int, fieldName string, dest reflect.Value, src reflect
 		// String -> arrays, slices, structs, and maps via
 		// json.Unmarshal.
 		case reflect.Array, reflect.Slice, reflect.Struct, reflect.Map:
+			//fmt.Fprintf(os.Stderr, "assignField reflect.Array... dest.Kind() = %d reflect.Struct=%d\n", dest.Kind(), reflect.Struct)
 			concreteVal := dest.Addr().Interface()
+			//fmt.Printf("assignField concreteVal: %+v\n", concreteVal)
 			err := json.Unmarshal([]byte(src.String()), &concreteVal)
+			//fmt.Fprintf(os.Stderr, "assignField src.String()=%s concreteVal = %s\n", src.String(), concreteVal)
 			if err != nil {
 				str := fmt.Sprintf("parameter #%d '%s' must "+
 					"be valid JSON which unsmarshals to a %v",
@@ -484,7 +488,6 @@ func assignField(paramNum int, fieldName string, dest reflect.Value, src reflect
 			dest.Set(reflect.ValueOf(concreteVal).Elem())
 		}
 	}
-
 	return nil
 }
 
@@ -528,6 +531,7 @@ func NewCmd(method string, args ...interface{}) (interface{}, error) {
 
 	// Ensure the number of parameters are correct.
 	numParams := len(args)
+	//fmt.Fprintf(os.Stderr, "numParams %d\n", numParams)
 	if err := checkNumParams(numParams, &info); err != nil {
 		return nil, err
 	}
@@ -546,7 +550,9 @@ func NewCmd(method string, args ...interface{}) (interface{}, error) {
 		// struct field.
 		rvf := rv.Field(i)
 		fieldName := strings.ToLower(rt.Field(i).Name)
+		//fmt.Fprintf(os.Stderr, "rtp %s rvp %s rvf %s\n",  rtp, rvp, rvf)
 		err := assignField(i+1, fieldName, rvf, reflect.ValueOf(args[i]))
+		//fmt.Fprintf(os.Stderr, "rt.Field(i).Name %s args[i] %s valueOf %s\n", rt.Field(i).Name, args[i], reflect.ValueOf(args[i]))
 		if err != nil {
 			return nil, err
 		}
